@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="CS4640 To-Do List">
+  <meta name="description" content="An example to-do list using DOM manipulation">  
+  <!--https://stackoverflow.com/questions/21450929/how-to-change-the-highlight-color-of-textbox-using-focus-selector-in-css-->
+  <title>Wahoordle</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"  crossorigin="anonymous"> 
+  <link href="style.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;1,400&family=Poppins:ital,wght@0,300;0,400;1,200;1,300;1,400&family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,500&display=swap" rel="stylesheet">
+  <!-- <script src="https://cs4640.cs.virginia.edu/homework/wordlewords.js"></script> -->
+  <script href="wordlewords.js">
+    var answer = "";
+    var totalguess = 0;
+    var score = {
+        total_games: 0,
+        total_guess: 0,
+        win_streak: 0,
+        games_won: 0,
+    };
+
+    var guess = {
+        attempt: [],
+        length: [],
+        letters: [],
+        placement: [],
+    };
+
+    
+
+    function printWord(word){
+       this.answer = word;
+       document.getElementById("guess").value="";
+
+       
+    }
+    function startGame(){
+       getRandomWord(printWord);
+       score.total_games += 1;
+       document.getElementById("btn").hidden = false;
+       document.getElementById("guess").value = "";
+       document.getElementById("guess").disabled = false;
+       document.getElementById("btn2").hidden = false;
+       document.getElementById("btnwin").hidden = true;
+
+    }
+
+
+
+    function clearHistory(){
+        score.total_games = 0;
+        score.total_guess = 0;
+        score.win_streak = 0;
+        score.games_won = 0;
+        totalguess = 0;
+        displayScore(score);
+        clearGuess();
+        startGame();
+    }
+
+    function clearGuess(){
+        guess.attempt=[];
+        guess.length=[];
+        guess.letters=[];
+        guess.placement=[];
+        totalguess = 0;
+
+        var table = document.getElementById("words");
+        for (let i = table.rows.length - 1; i > 0; i--) {
+            table.deleteRow(i);
+        }
+
+
+    }
+
+
+
+    function Win(){
+        score.total_games;
+        score.total_guess;
+        score.win_streak += 1;
+        score.games_won += 1;
+        totalguess = 0;
+        displayScore(score);
+
+        document.getElementById("guess").value = "YOU WIN";
+        document.getElementById("guess").disabled = true;
+        
+
+        document.getElementById("btn").hidden = true;
+        document.getElementById("btn2").hidden = true;
+        document.getElementById("btnwin").hidden = false;
+
+        
+    }
+
+    function resetWin(){
+        clearGuess();
+        startGame();
+    }
+
+    function Lose(){
+        score.total_games -=1;
+        score.total_guess -= totalguess;
+        score.win_streak = 0;
+        score.games_won;
+
+        totalguess = 0;
+
+        displayScore(score);
+        clearGuess();
+        startGame();
+    }
+
+
+    function displayScore(scores){
+        document.getElementById('played').innerHTML = 'Games Played: ' + scores.total_games;
+        document.getElementById('won').innerHTML = 'Games Won: ' + scores.games_won;
+        document.getElementById('streak').innerHTML = 'Win Streak: ' + scores.win_streak;
+        if(score.total_games == 0){
+            document.getElementById('per').innerHTML = 'Guess Per Game: ' + (0);
+
+        }
+        else{
+        document.getElementById('per').innerHTML = 'Avg Guess per Game: ' + (scores.total_guess/scores.total_games);
+        }
+        document.getElementById('total').innerHTML = 'Total Guesses: ' + (scores.total_guess);
+
+    }
+
+    
+
+    function displayGuess(attempt, length, letters, placement){
+        var table = document.getElementById("words");
+        var newRow = table.insertRow(table.rows.length);
+        newRow = table.insertRow(table.rows.length);
+        var newCell = newRow.insertCell(0);
+        newCell.textContent = attempt;
+        newCell = newRow.insertCell(1);
+        newCell.textContent = length;
+        newCell = newRow.insertCell(2);
+        newCell.textContent = letters;
+        newCell = newRow.insertCell(3);
+        newCell.textContent = placement;
+    }
+
+    function addGuess(){
+        var pattern = /^[A-Za-z]+$/;
+        var attempt = document.getElementById("guess").value.toLowerCase();
+        if(!pattern.test(attempt)){
+            document.getElementById("guess").value = "";
+        }
+        else{
+        totalguess = totalguess + 1;
+        score.total_guess += 1;
+       
+        var length = correctLength(attempt, answer);
+        var letters = correctCorrect(attempt, answer);
+        var placement = correctPlacement(attempt, answer);
+        displayGuess(attempt, length, letters, placement);
+        guess.attempt.push(attempt);
+        guess.length.push(length);
+        guess.letters.push(letters);
+        guess.placement.push(placement);
+        document.getElementById("guess").value = "";
+
+        if(placement == answer.length && length == "just right"){
+            Win();
+        }
+        else{
+            displayScore(score);
+        }
+    }
+        
+    }
+
+
+    function loadInfo(){
+        var scoreString = localStorage.getItem("scoreData");
+        if (scoreString != null) {
+            score = JSON.parse(scoreString);
+        
+            displayScore(score);
+        }
+
+        var guessString = localStorage.getItem("guessData");
+        if (guessString != null) {
+            guess = JSON.parse(guessString);
+            for (let i = 0; i < guess.attempt.length; i++) {
+              displayGuess(guess.attempt[i], guess.length[i], guess.letters[i], guess.placement[i]);
+            }
+        }
+
+        var answerString = localStorage.getItem("answer");
+        if (answerString == null) {
+            getWord();
+        }
+
+
+
+    }
+
+    function saveInfo(){
+        localStorage.setItem("scoreData", JSON.stringify(score));
+        localStorage.setItem("guessData", JSON.stringify(guess));
+        localStorage.setItem("answer", answer);
+    }
+
+    function correctPlacement(guess, answer){
+       guess = guess.toLowerCase();
+       answer = answer.toLowerCase();
+    
+       var count = 0;
+       for (let i = 0; i < guess.length; i++) {
+           if (answer[i] == (guess[i])) {
+               count++
+           }
+       }
+       return count;
+  
+   }
+
+
+   function correctCorrect(guess, answer){
+       guess = guess.toLowerCase();
+       answer = answer.toLowerCase();
+       var count = 0;
+       for (let i = 0; i < guess.length; i++) {
+           if (answer.includes(guess[i])) {
+               count++;
+               answer = answer.replace(guess[i], '');
+           }
+       }
+    
+       return count;
+   }
+
+   function correctLength(guess, answer){
+       var string = "";
+       if(guess.length < answer.length){
+           string = "too short";
+       }
+       else if(guess.length > answer.length){
+           string = "too long";
+       }
+       else{
+           //newCell.textContent = "just right";
+           string = "just right";
+       }
+       return string;
+   }
+
+   
+  </script>
+
+  <body onload="loadInfo();" onunload="saveInfo();">
+    <div class="container">
+    <div class = "row">
+        <div class = header>
+        <h1 class = "top">Wahoordle</h1>
+        <h1 class = "bottom">Wahoordle</h1>
+        <div class = "scoreboard">
+        <label for="games-played" class="form-label" id = "played" >Games Played:0</label>
+        <label for="games-won" class="form-label" id = "won">Games Won:0</label>
+        <label for="win-streak" class="form-label" id = "streak">Win Streak:0</label>
+        <label for="guess-per-game" class="form-lavel" id = "per">Guess Per Game:0</label>
+        <label for="total-guesses" class="form-lavel" id = "total">Total Guesses:0</label>
+        </div>
+    </div>
+        <div class="row-2">    
+            <div class="col-12">
+                <table id="words" class="table table-striped">
+                    <tr class="table-dark">
+                        <th style="width: 65%;">Guess</th>
+                        <th style="width: 10%;">Length</th>
+                        <th style="width: 10%;">Correct Characters</th>
+                        <th style="width: 10%;">Characters in right spot</th>
+                    </tr>
+                </table>
+    
+            </div>
+        
+        </div>
+        <form name="wordle-app">
+        <div class="input-group">
+            <input type="text" class="form-control form-group-lg" placeholder="Enter your guess" autofocus id="guess" name="guess"/>
+            
+            <input type="button" class="btn btn-primary" value="Play Again" hidden = "true" id = "btnwin" onclick="resetWin()"/> 
+            <input type="button" class="btn btn-primary" value="Submit" id = "btn" onclick="addGuess()"/> 
+            <input type="button" class="btn btn-primary" value="New Game" id = "btn2" onclick="Lose()"/> 
+            <input type="button" class="btn btn-primary" value="Reset History" id = "btn2" onclick="clearHistory()"/> 
+            <!-- onclick="addTodo();"/> -->           
+        </div>
+        </form>    
+    </div>
+</div>
+<script src="https://cs4640.cs.virginia.edu/homework/wordlewords.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
+
+</head>
+     

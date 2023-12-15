@@ -1,0 +1,124 @@
+.header{
+    background-color:rgb(198, 191, 181);
+    margin-left: -15vh;
+    margin-right: -15vh;
+   
+    
+   
+}
+label{
+    font-family: Poppins, Roboto, Noto Sans;
+    font-size: 110%;
+    text-align: center;
+    color:rgb(255, 255, 255)
+}
+h1{
+    font-size: 60px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    font-family: Noto Sans, Poppins, Roboto;
+    font-weight: 700;
+    text-transform: uppercase;
+    
+}
+
+.top{
+    color: rgb(0, 0, 0);
+    bottom: 3000;
+    text-transform: uppercase;
+
+
+}
+
+.bottom{
+    text-align: center;
+    margin-top: -80px;
+    margin-left: 13px;
+    color: rgb(255, 255, 255);
+    text-transform: uppercase;
+}
+.scoreboard{
+    text-align: center;
+}
+body{
+    background-color:rgb(198, 191, 181)
+}
+.input-group{
+    top:20vh;
+    
+}
+.form-control, .form-control:disabled{
+    border-radius: 0%;
+    border: 1px solid gray;
+    background-color: rgb(198, 191, 181);
+    height: 60px;
+    padding: 5px, 5px, 5px, 5px;
+    font-size: larger;
+    text-align: center;
+    font-weight: 600;    
+    left: 25%;
+    /* text-transform: uppercase; */
+
+}
+
+.btn, .btn:hover{
+    top: 85px;
+    border-radius: 0%;
+    right: 25%;
+    width: 20%;
+    margin-right: 4px;
+    font-size: large;
+    background-color: black;
+    font-family: Noto Sans, Poppins, Roboto;
+    height: 50px;
+    
+}
+
+.btn:active:hover{
+    top: 85px;
+    border-radius: 0%;
+    right: 25%;
+    width: 20%;
+    font-size: large;
+    background-color: rgb(228, 222, 222);
+    color: black;
+    font-family: Noto Sans, Poppins, Roboto;
+    height: 50px;
+    
+}
+
+.btn:active:hover:focus{
+    border-color: rgb(110, 97, 79);
+    outline: 0;
+    font-weight: 600;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(49, 56, 45, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(55, 62, 68, 0.6);
+    top: 85px;
+    border-radius: 0%;
+    right: 25%;
+    width: 20%;
+    font-size: large;
+    font-family: Noto Sans, Poppins, Roboto;
+    height: 50px;
+}
+
+
+.form-control:focus{
+    background-color: rgb(198, 191, 181);
+    border-color: rgb(110, 97, 79);
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(49, 56, 45, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(55, 62, 68, 0.6);
+}  
+
+.input-group{
+    align-self: center;;
+    margin-left: 20px;
+}
+
+
+
+.header{
+margin-left: 0px;
+align-content: center;
+}
